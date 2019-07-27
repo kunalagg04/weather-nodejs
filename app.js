@@ -24,4 +24,25 @@ request({url : url , json : true } , (error,response) => {
 })
 
 
+//MAPBOX api to convert location tring to co-ordinates  , so that Darksky api can be used to check weather using co-ordinates.
+const geoUrl = "https://api.mapbox.com/geocoding/v5/mapbox.places/Los%20Angeles.json?access_token=pk.eyJ1Ijoia3VuYWxhZ2cwNCIsImEiOiJjanlsZGp6OHowNnRjM25ubzk3dDRsMTNuIn0.kywygU8bwoxrr2nG_VuX8w"
+
+
+request({url : geoUrl , json : true} , (error , response) => {
+    if(error){
+        console.log("Unable to access internet")
+    }
+
+    //if we user enters some location which does not exist , then mapbox api returns a json objext with a feature property and is an empty array
+    else if(response.body.features.length == 0){
+        console.log("unable to find location")
+    }
+
+    else{
+        const latitude = response.body.features[0].center[0]
+        const longitude = response.body.features[0].center[1]
+        console.log(latitude + "," + longitude)
+    }
+   
+})
 
