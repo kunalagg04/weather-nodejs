@@ -1,7 +1,7 @@
 const greeter = (name = 'user', age) => {
-    console.log('Hello ' + name)
+    console.log('Hello ' + name + age)
 }
 
-greeter('Andrew')
+greeter('Andrew' )
 
 greeter()
