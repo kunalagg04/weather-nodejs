@@ -4,6 +4,9 @@ const path = require('path')
 const express = require('express')
 //express is basiclly a function with buch of methods
 
+const forecast = require('./utils/forecast')
+const geocode = require('./utils/geocode')
+
 //hbs is used for dynamic rendering 
 const hbs = require('hbs')
 
@@ -60,6 +63,54 @@ app.get('/about' , (req , res) => {
     {
         name:"Priyanshu"
     }])
+})
+
+
+//in this we have static data we'll replce it with data from api
+//query string
+// app.get('/return',(req,res) => {
+//     if(!req.query.address){
+//         return res.send( "please enter a place")
+//     }
+
+//     return res.send({
+//         location : req.query.address,
+//         weather : "Sample"
+//     })
+
+    
+// })
+
+app.get('/return',(req,res) => {
+    if(!req.query.address){
+        return res.send({
+            error: "Please enter a location"
+        })
+    }
+
+    geocode(req.query.address , (error,data) => {
+        if(error){
+            return res.send({
+                error : error
+            })
+        }
+
+        forecast(data.latitude , data.longitude , (error,fdata) => {
+            if(error){
+                return res.send({
+                    error: error
+                })
+            }
+            
+            res.send({
+                location : data.location,
+                weather : fdata
+
+            })
+           
+            
+        })
+    })
 })
 
 //* is used to render 404 pages .
